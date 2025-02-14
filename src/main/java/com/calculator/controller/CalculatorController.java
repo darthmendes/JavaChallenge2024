@@ -6,25 +6,23 @@ import java.math.RoundingMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.kafka.producer.MessageProducer;
+import com.calculator.kafka.KafkaConsumer;
+import com.calculator.kafka.KafkaProducer;
 
 @RestController
 @RequestMapping(value = "/api/calculator")
 public class CalculatorController {
 
     @Autowired
-    private MessageProducer messageProducer;
+    KafkaProducer kafkaProducer;
 
-    @PostMapping("/send")
-    public String sendMessage(@RequestParam("message") String message) {
-        messageProducer.sendMessage("my-topic", message);
-        return "Message sent: " + message;
-    }
+    @Autowired
+    KafkaConsumer kafkaConsumer;
 
     @PostMapping("/{operation}")
     public BigDecimal calc(@PathVariable String operation, @RequestParam BigDecimal a, @RequestParam BigDecimal b) {
         return switch (operation.toUpperCase()) {
-            case "SUM" -> a.add(b);
+            case "SUM" ->  kafkaProducer.postcalc("sum", a, b);
             case "SUBTRACTION" -> a.subtract(b);
             case "MULTIPLICATION" -> a.multiply(b);
             case "DIVISION" -> {

@@ -1,18 +1,37 @@
 package com.rest.demo;
 
-import org.springframework.web.bind.annotation.*;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import com.calculator.model.CalculatorEntity;
+import com.rest.Restkafka.RestKafkaConsumer;
+import com.rest.Restkafka.RestKafkaProducer;
+
 @RestController
-@RequestMapping("/calculator")
-public class controller {
+@RequestMapping(value = "/calculator")
+public class Controller {
+
+    @Autowired
+    RestKafkaProducer kafkaProducer;
+
+    @Autowired
+    RestKafkaConsumer kafkaConsumer;
 
     @PostMapping("/{operation}")
     public BigDecimal calc(@PathVariable String operation, @RequestParam BigDecimal a, @RequestParam BigDecimal b) {
+        CalculatorEntity calculatorEntity = new CalculatorEntity();
+        calculatorEntity.setA(a);
+        calculatorEntity.setB(b);
+        calculatorEntity.setOperation(operation);
+
         return switch (operation.toUpperCase()) {
-            case "SUM" -> a.add(b);
+            case "SUM" ->  {
+                kafkaProducer.postcalc("operation",  calculatorEntity);
+                yield a.add(b);
+            }
             case "SUBTRACTION" -> a.subtract(b);
             case "MULTIPLICATION" -> a.multiply(b);
             case "DIVISION" -> {
@@ -24,4 +43,5 @@ public class controller {
             default -> throw new IllegalArgumentException("Unsupported operation: " + operation);
         };
     }
+
 }
