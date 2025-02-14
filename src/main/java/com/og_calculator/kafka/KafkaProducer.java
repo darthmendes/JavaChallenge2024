@@ -1,4 +1,4 @@
-package com.calculator.kafka;
+package com.og_calculator.kafka;
 
 
 import java.math.BigDecimal;

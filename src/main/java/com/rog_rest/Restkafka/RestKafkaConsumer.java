@@ -1,4 +1,4 @@
-package com.rest.Restkafka;
+package com.rog_rest.Restkafka;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

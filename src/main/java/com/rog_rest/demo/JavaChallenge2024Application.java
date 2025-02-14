@@ -1,4 +1,4 @@
-package com.rest.demo;
+package com.rog_rest.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

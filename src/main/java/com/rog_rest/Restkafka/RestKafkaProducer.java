@@ -1,4 +1,4 @@
-package com.rest.Restkafka;
+package com.rog_rest.Restkafka;
 
 
 import java.math.BigDecimal;
@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import com.calculator.model.CalculatorEntity;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.og_calculator.model.CalculatorEntity;
 
 @Service
 public class RestKafkaProducer {

@@ -1,4 +1,4 @@
-package com.calculator.controller;
+package com.og_calculator.controller;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -6,8 +6,8 @@ import java.math.RoundingMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.calculator.kafka.KafkaConsumer;
-import com.calculator.kafka.KafkaProducer;
+import com.og_calculator.kafka.KafkaConsumer;
+import com.og_calculator.kafka.KafkaProducer;
 
 @RestController
 @RequestMapping(value = "/api/calculator")

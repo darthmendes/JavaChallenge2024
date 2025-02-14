@@ -1,4 +1,4 @@
-package com.rest.demo;
+package com.rog_rest.demo;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -6,9 +6,9 @@ import java.math.RoundingMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.calculator.model.CalculatorEntity;
-import com.rest.Restkafka.RestKafkaConsumer;
-import com.rest.Restkafka.RestKafkaProducer;
+import com.og_calculator.model.CalculatorEntity;
+import com.rog_rest.Restkafka.RestKafkaConsumer;
+import com.rog_rest.Restkafka.RestKafkaProducer;
 
 @RestController
 @RequestMapping(value = "/calculator")

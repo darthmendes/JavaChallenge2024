@@ -1,4 +1,4 @@
-package com.calculator.model;
+package com.og_calculator.model;
 
 import java.math.BigDecimal;
 import java.util.Objects;
