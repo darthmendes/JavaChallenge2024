@@ -3,7 +3,7 @@ package com.rog_rest.demo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication(scanBasePackages={"com.rest.demo", "com.calculator.kafka","com.rest.Restkafka"})
+@SpringBootApplication(scanBasePackages={"com.example.rest_api_module","com.example.calculator_module"})
 public class JavaChallenge2024Application {
 
 	public static void main(String[] args) {

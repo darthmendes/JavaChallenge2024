@@ -1,6 +1,7 @@
-package com.og_calculator.model;
+package com.example.calculator_module.model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Objects;
 
 public class CalculatorEntity {
@@ -47,7 +48,7 @@ public class CalculatorEntity {
                 if (this.b.equals(BigDecimal.ZERO)) {
                     return BigDecimal.ZERO;
                 }
-                return this.a.divide(this.b);
+                return this.a.divide(this.b, RoundingMode.HALF_UP);
             default:
                 return BigDecimal.ZERO;
             }
