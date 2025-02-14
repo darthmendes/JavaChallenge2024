@@ -20,21 +20,21 @@ public class Controller {
     @Autowired
     RestKafkaConsumer kafkaConsumer;
 
-    @PostMapping("/{operation}")
+    @GetMapping("/{operation}")
     public BigDecimal calc(@PathVariable String operation, @RequestParam BigDecimal a, @RequestParam BigDecimal b) {
         CalculatorEntity calculatorEntity = new CalculatorEntity();
         calculatorEntity.setA(a);
         calculatorEntity.setB(b);
-        calculatorEntity.setOperation(operation);
+        calculatorEntity.setOperation(operation.toLowerCase());
 
-        return switch (operation.toUpperCase()) {
-            case "SUM" ->  {
+        return switch (operation.toLowerCase()) {
+            case "sum" ->  {
                 kafkaProducer.postcalc("operation",  calculatorEntity);
                 yield a.add(b);
             }
-            case "SUBTRACTION" -> a.subtract(b);
-            case "MULTIPLICATION" -> a.multiply(b);
-            case "DIVISION" -> {
+            case "subtraction" -> a.subtract(b);
+            case "multiplication" -> a.multiply(b);
+            case "division" -> {
                 if (BigDecimal.ZERO.compareTo(b) == 0) {
                     throw new IllegalArgumentException("Division by zero is not allowed.");
                 }

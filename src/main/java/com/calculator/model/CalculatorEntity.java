@@ -35,6 +35,23 @@ public class CalculatorEntity {
         return this.b;
     }
         
+    public BigDecimal doOp(){
+        switch (this.operation) {
+            case "sum":
+                return this.a.add(this.b);
+            case "subtraction":
+                return this.a.subtract(this.b);
+            case "multiplication":
+                return this.a.multiply(this.b);
+            case "division":
+                if (this.b.equals(BigDecimal.ZERO)) {
+                    return BigDecimal.ZERO;
+                }
+                return this.a.divide(this.b);
+            default:
+                return BigDecimal.ZERO;
+            }
+    }
 
     @Override
     public boolean equals(Object o) {
