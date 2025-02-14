@@ -3,6 +3,9 @@ package com.example.rest_api_module.controller;
 import java.math.BigDecimal;
 import java.util.concurrent.CompletableFuture;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,8 +22,11 @@ public class RestAPIController {
     @Autowired
     private KafkaResponseListener kafkaResponseListener;
 
+    private static final Logger logger = LoggerFactory.getLogger(RestController.class);
+
     @GetMapping("/{operation}")
     public String calculateSum(@PathVariable String operation, @RequestParam("a") BigDecimal a, @RequestParam("b") BigDecimal b) throws InterruptedException {
+        logger.info("Rest Received request off {}: a={}, b={}",operation, a, b);
         try {       
              operation = operation.toLowerCase();
             
@@ -44,6 +50,7 @@ public class RestAPIController {
             String result = future.join();
             return "{ 'result': " + result + " }";
         } catch (Exception e) {
+            logger.error("Rest Error processing request: {}", e.getMessage());
             throw new IllegalArgumentException(e.getMessage());
         }
     }

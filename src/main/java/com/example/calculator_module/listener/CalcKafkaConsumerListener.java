@@ -11,9 +11,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 public class CalcKafkaConsumerListener {
     private final KafkaTemplate<String, String> kafkaTemplate;
+
+    private static final Logger logger = LoggerFactory.getLogger(CalcKafkaConsumerListener.class);
 
     public CalcKafkaConsumerListener(KafkaTemplate<String, String> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
@@ -21,12 +26,16 @@ public class CalcKafkaConsumerListener {
 
     @KafkaListener(topics = "request-topic")
     public void listen(String message) throws JsonMappingException, JsonProcessingException {
-        System.out.println("Calc Received Message: " + message);
-
-        ObjectMapper mapper = new ObjectMapper();
-        CalculatorEntity calculatorEntity = mapper.readValue(message, CalculatorEntity.class);
-        BigDecimal res = calculatorEntity.doOp();
-        
-        kafkaTemplate.send("response-topic", String.valueOf(res));
+        logger.info("Calc Received msg from Kafka: {}", message);
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            CalculatorEntity calculatorEntity = mapper.readValue(message, CalculatorEntity.class);
+            BigDecimal res = calculatorEntity.doOp();
+            
+            kafkaTemplate.send("response-topic", String.valueOf(res));
+            logger.info("Calc Sent result to Kafka: {}", res);
+        } catch (Exception e) {
+            logger.error("Calc Error processing message", e);
+        }
     }
 }
