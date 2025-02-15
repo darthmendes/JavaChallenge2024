@@ -1,6 +1,7 @@
 package com.example.calculator_module.listener;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -13,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 @Service
 public class CalcKafkaConsumerListener {
@@ -25,17 +27,37 @@ public class CalcKafkaConsumerListener {
     }
 
     @KafkaListener(topics = "request-topic")
-    public void listen(String message) throws JsonMappingException, JsonProcessingException {
+    public void listen(String message, String Id) throws JsonMappingException, JsonProcessingException {            
+        Map<String, Object> payload = parseMessage(message);
+        String requestId = (String) payload.get("requestId");
+
+        String operation = (String) payload.get("operation");
+        BigDecimal a = new BigDecimal((String) payload.get("a"));
+        BigDecimal b = new BigDecimal((String) payload.get("b"));
+        
+        CalculatorEntity calculatorEntity = new CalculatorEntity(operation,a,b); 
+
+        MDC.put("requestId",requestId);
         logger.info("Calc Received msg from Kafka: {}", message);
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            CalculatorEntity calculatorEntity = mapper.readValue(message, CalculatorEntity.class);
             BigDecimal res = calculatorEntity.doOp();
             
-            kafkaTemplate.send("response-topic", String.valueOf(res));
-            logger.info("Calc Sent result to Kafka: {}", res);
+            kafkaTemplate.send("response-topic", requestId, String.valueOf(res));
+            logger.info("Calc Sent result to Kafka: {} with id {}", res, requestId);
         } catch (Exception e) {
             logger.error("Calc Error processing message", e);
+        } finally {
+            MDC.clear();
         }
     }
+    private Map<String, Object> parseMessage(String message) {
+        // Simple JSON parsing logic (use a library like Jackson for production code)
+        return Map.of(
+                "requestId", message.split(",")[0].split(":")[1],
+                "operation", message.split(",")[1].split(":")[1].replace("\"", ""),
+                "a", message.split(",")[2].split(":")[1],
+                "b", message.split(",")[3].split(":")[1].replace("}", "")
+        );
+    }
+
 }

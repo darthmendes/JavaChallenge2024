@@ -17,8 +17,8 @@ public class KafkaProducerService {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void sendMessage(String message) {
-        logger.info("Rest Sending message by Kafka: {}", message);
-        kafkaTemplate.send("request-topic", message);
+    public void sendMessage(String message, String Id) {
+        logger.info("Rest Sending message with id {} by Kafka: {}", Id, message);
+        kafkaTemplate.send("request-topic", Id, message);
     }
 }

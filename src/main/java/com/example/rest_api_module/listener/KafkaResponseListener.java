@@ -16,13 +16,13 @@ public class KafkaResponseListener {
 
     private static final Logger logger = LoggerFactory.getLogger(KafkaResponseListener.class);
     
-    public CompletableFuture<String> listenForResponse() {
+    public CompletableFuture<String> listenForResponse(String requestId) {
         future = new CompletableFuture<>();
         return future;
     }
 
     @KafkaListener(topics = "response-topic")
-    public void listen(String message) {
+    public void listen(String message, String requestId) {
         logger.info("Rest Received message from Kafka: {}", message);
         if (future != null) {
             future.complete(message);
