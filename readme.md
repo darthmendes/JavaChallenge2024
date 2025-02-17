@@ -11,6 +11,6 @@ division is done like (a / b)
 I'm more familiar with Python's APIs and backend protocols but i think i managed to adapt and implement almost everything correctly in Java with Springboot and Kafka.
 I tried to implement unit testing but since that differs from Python i wasn't able to learn everything in time of completion of this project (in the sense that you should have a folder called tests where specific scripting goes).
 I did however, ran simple HTTP request based testing. Meaning if the operations were implement correctly and a minor error handling of the URL.
-I'm also a bit unfamiliar with transforming Java projects in docker images  
+I'm also a bit unfamiliar with transforming Java projects in docker images, hence why im only sending this project.
 
 I hope my work is according to the expected and I'm eagered to learn more and grow as a Backend Software Engineer.
